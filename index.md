@@ -4,5 +4,5 @@ title: threee.tv
 ---
 
 <div class="video-container">
-  <video id="video" controls autoplay muted playsinline></video>
+  <video id="video" autoplay muted playsinline></video>
 </div>

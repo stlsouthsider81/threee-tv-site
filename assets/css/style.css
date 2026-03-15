@@ -44,25 +44,16 @@ header {
   object-fit: cover;
 }
 
-.watch-now {
+.app-store-badge {
   position: fixed;
   bottom: 2rem;
   right: 2rem;
   z-index: 10;
-  padding: 0.75rem 2rem;
-  background: #fff;
-  color: #000;
-  border: none;
-  border-radius: 2rem;
-  font-size: 1rem;
-  font-weight: 600;
-  letter-spacing: 0.03em;
-  cursor: pointer;
-  transition: background 0.2s, transform 0.2s;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+  transition: opacity 0.2s, transform 0.2s;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.5));
 }
 
-.watch-now:hover {
-  background: #e0e0e0;
+.app-store-badge:hover {
+  opacity: 0.85;
   transform: scale(1.05);
 }

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ page.title | default: site.title }}</title>
+  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+</head>
+<body>
+  <header>
+    <a href="/" class="logo">threee.tv</a>
+  </header>
+  {{ content }}
+  <button class="watch-now" onclick="var v=document.getElementById('video');v.muted=false;v.play();this.style.display='none';">Watch Now</button>
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <script>
+    var video = document.getElementById('video');
+    var src = 'https://stream.threee.tv/hls/stream.m3u8';
+    if (Hls.isSupported()) {
+      var hls = new Hls();
+      hls.loadSource(src);
+      hls.attachMedia(video);
+    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+      video.src = src;
+    }
+  </script>
+</body>
+</html>

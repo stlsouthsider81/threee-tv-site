@@ -4,6 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{ page.title | default: site.title }}</title>
+  <link rel="icon" href="{{ '/favicon.ico' | relative_url }}" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="{{ '/assets/images/favicon-32x32.png' | relative_url }}">
+  <link rel="icon" type="image/png" sizes="16x16" href="{{ '/assets/images/favicon-16x16.png' | relative_url }}">
+  <link rel="apple-touch-icon" sizes="180x180" href="{{ '/assets/images/apple-touch-icon.png' | relative_url }}">
   <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
   <!-- Google Tag Manager -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -19,9 +23,16 @@
   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <!-- End Google Tag Manager (noscript) -->
   <header>
-    <a href="/" class="logo">threee.tv</a>
+    <a href="/" class="logo">
+      <img src="{{ '/assets/images/logo.png' | relative_url }}" alt="Threee TV">
+    </a>
   </header>
-  {{ content }}
+  <div class="video-container">
+    <video id="video" autoplay muted playsinline></video>
+    <div id="loader" class="loader">
+      <img src="{{ '/assets/images/logo.png' | relative_url }}" alt="">
+    </div>
+  </div>
   <a href="#" class="app-store-badge" aria-label="Download on the App Store">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 40" width="150" height="50">
       <rect width="120" height="40" rx="5" fill="#000" stroke="#fff" stroke-width="0.8"/>
@@ -35,21 +46,31 @@
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
   <script>
     var video = document.getElementById('video');
-    var src = 'https://stream.threee.tv/hls/stream.m3u8';
-    if (Hls.isSupported()) {
-      var hls = new Hls();
-      hls.loadSource(src);
-      hls.attachMedia(video);
-    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-      video.src = src;
+    if (video) {
+      var loader = document.getElementById('loader');
+      var showLoader = function () { if (loader) loader.classList.remove('hidden'); };
+      var hideLoader = function () { if (loader) loader.classList.add('hidden'); };
+      var src = 'https://stream.threee.tv/hls/stream.m3u8';
+      if (Hls.isSupported()) {
+        var hls = new Hls();
+        hls.loadSource(src);
+        hls.attachMedia(video);
+      } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src = src;
+      }
+      video.addEventListener('playing', hideLoader);
+      video.addEventListener('canplay', hideLoader);
+      video.addEventListener('waiting', showLoader);
+      video.addEventListener('stalled', showLoader);
+      video.addEventListener('error', showLoader);
+      video.addEventListener('click', function(e) {
+        e.preventDefault();
+        video.muted = !video.muted;
+      });
+      video.addEventListener('pause', function() {
+        video.play();
+      });
     }
-    video.addEventListener('click', function(e) {
-      e.preventDefault();
-      video.muted = !video.muted;
-    });
-    video.addEventListener('pause', function() {
-      video.play();
-    });
   </script>
 </body>
 </html>

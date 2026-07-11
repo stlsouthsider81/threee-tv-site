@@ -33,15 +33,18 @@
       <img src="{{ '/assets/images/logo.png' | relative_url }}" alt="">
     </div>
   </div>
-  <a href="#" class="app-store-badge" aria-label="Download on the App Store">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 40" width="150" height="50">
-      <rect width="120" height="40" rx="5" fill="#000" stroke="#fff" stroke-width="0.8"/>
-      <text x="60" y="14" text-anchor="middle" fill="#fff" font-family="-apple-system, sans-serif" font-size="6">Download on the</text>
-      <text x="65" y="28" text-anchor="middle" fill="#fff" font-family="-apple-system, sans-serif" font-size="12" font-weight="600">App Store</text>
-      <g transform="translate(18, 11) scale(0.038)" fill="#fff">
-        <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-83.8-19.5-28.1-48.6-43.6-86.8-46.8-37.2-3.1-74.8 21.8-89.1 21.8-15.2 0-47.6-20.5-73.6-20.5C75.5 140.3 0 183.2 0 274.6c0 26.3 4.8 53.5 14.4 81.6 12.8 37.2 59 128.4 107.2 126.9 24.8-.6 42.4-17.8 74.8-17.8 31.2 0 47.6 17.8 75.2 17.8 48.8-.8 90.4-82.4 102.4-119.6-65.2-30.7-96.3-90.2-96.1-155.8zm-89.6-142c27.6-33.5 24.4-64.4 23.6-75.2-23.6 1.4-51 15.7-66.8 33.9-17.2 19.5-27.2 43.6-25.2 71.3 25.6 2 49.2-12.4 68.4-30z"/>
-      </g>
+  <button id="mute-btn" class="mute-btn" type="button" aria-label="Unmute" aria-pressed="true">
+    <svg class="icon-muted" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path d="M11 5 6 9H2v6h4l5 4V5z"/>
+      <path d="M23 9l-6 6M17 9l6 6" stroke-linecap="round"/>
     </svg>
+    <svg class="icon-unmuted" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path d="M11 5 6 9H2v6h4l5 4V5z"/>
+      <path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a9 9 0 0 1 0 14" fill="none" stroke-linecap="round"/>
+    </svg>
+  </button>
+  <a href="https://apps.apple.com/us/app/threee-tv/id6762097424" class="app-store-badge" aria-label="Download on the App Store" target="_blank" rel="noopener noreferrer">
+    <img src="{{ '/assets/images/app-store-badge.svg' | relative_url }}" alt="Download on the App Store" width="150" height="50">
   </a>
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
   <script>
@@ -63,13 +66,37 @@
       video.addEventListener('waiting', showLoader);
       video.addEventListener('stalled', showLoader);
       video.addEventListener('error', showLoader);
-      video.addEventListener('click', function(e) {
-        e.preventDefault();
-        video.muted = !video.muted;
-      });
       video.addEventListener('pause', function() {
         video.play();
       });
+
+      var muteBtn = document.getElementById('mute-btn');
+      var syncMuteBtn = function () {
+        muteBtn.classList.toggle('is-muted', video.muted);
+        muteBtn.setAttribute('aria-pressed', String(video.muted));
+        muteBtn.setAttribute('aria-label', video.muted ? 'Unmute' : 'Mute');
+      };
+      muteBtn.addEventListener('click', function () {
+        video.muted = !video.muted;
+        syncMuteBtn();
+        showControls();
+      });
+      video.addEventListener('volumechange', syncMuteBtn);
+      syncMuteBtn();
+
+      // Fade the controls away after a period of inactivity.
+      var hideTimer;
+      var showControls = function () {
+        document.body.classList.remove('controls-hidden');
+        clearTimeout(hideTimer);
+        hideTimer = setTimeout(function () {
+          document.body.classList.add('controls-hidden');
+        }, 3000);
+      };
+      ['pointermove', 'pointerdown', 'touchstart', 'keydown'].forEach(function (evt) {
+        document.addEventListener(evt, showControls, { passive: true });
+      });
+      showControls();
     }
   </script>
 </body>

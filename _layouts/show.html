@@ -49,6 +49,23 @@
         <p class="show-kicker">Now streaming on Threee TV</p>
         <h1>{{ page.title }}</h1>
         {% if page.tagline %}<p class="show-tagline">{{ page.tagline }}</p>{% endif %}
+        {% if page.description %}
+        <button type="button"
+                class="show-desc-toggle"
+                id="show-desc-toggle"
+                aria-expanded="false"
+                aria-controls="show-desc-panel">
+          <span class="show-desc-toggle-label">More info</span>
+          <svg class="show-desc-chevron" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <div class="show-desc-panel" id="show-desc-panel">
+          <div class="show-desc-panel-inner">
+            <p class="show-description">{{ page.description }}</p>
+          </div>
+        </div>
+        {% endif %}
         {% if page.rating or page.episode_count or page.hosts %}
         <div class="show-meta">
           {% if page.rating %}

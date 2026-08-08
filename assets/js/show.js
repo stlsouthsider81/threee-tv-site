@@ -35,6 +35,20 @@
     window.location.href = scheme;
   }
 
+  function initDescToggle() {
+    var toggle = document.getElementById('show-desc-toggle');
+    var panel = document.getElementById('show-desc-panel');
+    if (!toggle || !panel) return;
+
+    var label = toggle.querySelector('.show-desc-toggle-label');
+
+    toggle.addEventListener('click', function () {
+      var isOpen = panel.classList.toggle('is-open');
+      toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      if (label) label.textContent = isOpen ? 'Less info' : 'More info';
+    });
+  }
+
   document.addEventListener('DOMContentLoaded', function () {
     var ctas = document.querySelectorAll('.show-cta');
     ctas.forEach(function (cta) {
@@ -48,5 +62,7 @@
         // Otherwise let the normal App Store link navigate as-is.
       });
     });
+
+    initDescToggle();
   });
 })();

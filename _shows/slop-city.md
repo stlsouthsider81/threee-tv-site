@@ -1,6 +1,12 @@
 ---
 title: "Slop City"
 tagline: "A Fast Action Podcast. Fully improvised. Nothing off limits."
+description: >
+  Slop City is a no-script, no-filter weekly hangout with two St. Louis
+  comedians who talk about everything — mental health, bad dates, whatever
+  ridiculous thing happened this week — and mean every word of it. There's no
+  format because there's no need for one: just two best friends being exactly
+  who they are, out loud, every Tuesday.
 permalink: /s/slop-city/
 hero_image: "/assets/images/shows/slop-city/cover.jpg"
 hosts: ["Libbie Higgins", "Tina Dybal"]

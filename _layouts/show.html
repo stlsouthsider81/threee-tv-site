@@ -92,6 +92,25 @@
       </div>
       </div>
 
+      {% assign spotlight_shows = page.live_shows | where_exp: "item", "item.status == 'upcoming' or item.status == 'live'" | sort: "datetime" %}
+      {% if spotlight_shows.size > 0 %}
+      <div class="show-live-spotlight">
+        {% for event in spotlight_shows %}
+        <div class="show-live-card{% if event.status == 'live' %} is-live{% endif %}"
+             data-status="{{ event.status }}"
+             {% if event.datetime %}data-datetime="{{ event.datetime | date_to_xmlschema }}"{% endif %}>
+          <span class="show-live-card-badge">{% if event.status == 'live' %}Live Now{% else %}Upcoming{% endif %}</span>
+          <p class="show-live-card-title">{{ event.title }}</p>
+          {% if event.datetime %}
+          <p class="show-live-card-time">{{ event.datetime | date: "%A, %b %-d" }} at {{ event.datetime | date: "%-I:%M %p" }} {{ event.timezone_label | default: page.schedule.timezone_label }}</p>
+          {% elsif event.date %}
+          <p class="show-live-card-time">{{ event.date | date: "%A, %b %-d" }}</p>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
       {% if page.schedule %}
       <div class="show-schedule">
         <p class="show-schedule-heading">
@@ -123,13 +142,12 @@
     <div class="show-info-inner">
       {{ content }}
 
-      {% if page.live_shows and page.live_shows.size > 0 %}
-      <h2>Live Shows</h2>
+      {% assign past_shows = page.live_shows | where_exp: "item", "item.status == 'past'" | sort: "date" | reverse %}
+      {% if past_shows.size > 0 %}
+      <h2>Past Live Shows</h2>
       <ul class="show-live-list">
-        {% assign live_shows = page.live_shows | sort: "date" | reverse %}
-        {% for event in live_shows %}
-        <li class="show-live-item{% if event.status == 'upcoming' %} is-upcoming{% endif %}">
-          {% if event.status == 'upcoming' %}<span class="show-live-badge">Upcoming</span>{% endif %}
+        {% for event in past_shows %}
+        <li class="show-live-item">
           <span class="show-live-date">{{ event.date | date: "%b %-d, %Y" }}</span>
           <span class="show-live-title">{{ event.title }}</span>
         </li>

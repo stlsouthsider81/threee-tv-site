@@ -513,6 +513,54 @@ a.show-rating:hover {
   margin-top: 1.5rem;
 }
 
+.show-live-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.show-live-item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.75rem;
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.show-live-item.is-upcoming {
+  background: rgba(254, 33, 100, 0.14);
+  box-shadow: 0 0 0 1px rgba(254, 33, 100, 0.4) inset;
+}
+
+.show-live-date {
+  flex: 0 0 auto;
+  font-variant-numeric: tabular-nums;
+  font-size: 0.85rem;
+  opacity: 0.65;
+}
+
+.show-live-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.show-live-badge {
+  flex: 0 0 auto;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: #fe2164;
+  padding: 0.2rem 0.5rem;
+  border: 1px solid rgba(254, 33, 100, 0.5);
+  border-radius: 999px;
+}
+
 @media (max-width: 780px) {
   .show-hero {
     min-height: auto;

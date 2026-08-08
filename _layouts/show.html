@@ -122,6 +122,21 @@
   <main class="show-info">
     <div class="show-info-inner">
       {{ content }}
+
+      {% if page.live_shows and page.live_shows.size > 0 %}
+      <h2>Live Shows</h2>
+      <ul class="show-live-list">
+        {% assign live_shows = page.live_shows | sort: "date" | reverse %}
+        {% for event in live_shows %}
+        <li class="show-live-item{% if event.status == 'upcoming' %} is-upcoming{% endif %}">
+          {% if event.status == 'upcoming' %}<span class="show-live-badge">Upcoming</span>{% endif %}
+          <span class="show-live-date">{{ event.date | date: "%b %-d, %Y" }}</span>
+          <span class="show-live-title">{{ event.title }}</span>
+        </li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+
       <a href="{{ page.app_store_url }}"
          class="show-cta show-cta-secondary"
          data-show-slug="{{ page.slug }}"

@@ -48,6 +48,10 @@ schedule:
       end: "24:00"
       title: "Slop After Dark"
       content: "Slop City specials, shuffled"
+live_shows:
+  - title: "730 LIVESTREAM WATCH PARTY Fruit Cocktail (Donald's Version)"
+    date: "2026-07-14"
+    status: "past"
 ---
 
 ## About the show

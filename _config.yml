@@ -6,3 +6,15 @@ url: ""
 markdown: kramdown
 theme: null
 plugins: []
+
+collections:
+  shows:
+    output: true
+    permalink: /s/:path/
+
+defaults:
+  - scope:
+      path: ""
+      type: "shows"
+    values:
+      layout: "show"

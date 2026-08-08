@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" class="show">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ page.title }} — {{ site.title }}</title>
+  <meta name="description" content="{{ page.tagline | default: site.description }}">
+  <link rel="icon" href="{{ '/favicon.ico' | relative_url }}" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="{{ '/assets/images/favicon-32x32.png' | relative_url }}">
+  <link rel="icon" type="image/png" sizes="16x16" href="{{ '/assets/images/favicon-16x16.png' | relative_url }}">
+  <link rel="apple-touch-icon" sizes="180x180" href="{{ '/assets/images/apple-touch-icon.png' | relative_url }}">
+  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="{{ page.title }}">
+  <meta property="og:description" content="{{ page.tagline | default: site.description }}">
+  <meta property="og:image" content="{{ page.hero_image | absolute_url }}">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ page.title }}">
+  <meta name="twitter:description" content="{{ page.tagline | default: site.description }}">
+  <meta name="twitter:image" content="{{ page.hero_image | absolute_url }}">
+
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-PSM7B9GF');</script>
+  <!-- End Google Tag Manager -->
+</head>
+<body class="show">
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PSM7B9GF"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+  <header class="show-header">
+    <a href="/" class="logo">
+      <img src="{{ '/assets/images/logo.png' | relative_url }}" alt="Threee TV">
+    </a>
+  </header>
+
+  <section class="show-hero">
+    <div class="show-hero-bg" style="background-image: url('{{ page.hero_image | relative_url }}');"></div>
+    <div class="show-hero-scrim"></div>
+    <div class="show-hero-content">
+      <div class="show-hero-top">
+      <img class="show-cover" src="{{ page.hero_image | relative_url }}" alt="{{ page.title }} cover art" width="360" height="360">
+      <div class="show-hero-text">
+        <p class="show-kicker">Now streaming on Threee TV</p>
+        <h1>{{ page.title }}</h1>
+        {% if page.tagline %}<p class="show-tagline">{{ page.tagline }}</p>{% endif %}
+        {% if page.description %}
+        <button type="button"
+                class="show-desc-toggle"
+                id="show-desc-toggle"
+                aria-expanded="false"
+                aria-controls="show-desc-panel">
+          <span class="show-desc-toggle-label">More info</span>
+          <svg class="show-desc-chevron" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <div class="show-desc-panel" id="show-desc-panel">
+          <div class="show-desc-panel-inner">
+            <p class="show-description">{{ page.description }}</p>
+          </div>
+        </div>
+        {% endif %}
+        {% if page.rating or page.episode_count or page.hosts %}
+        <div class="show-meta">
+          {% if page.rating %}
+            {% if page.rating_url %}<a class="show-rating" href="{{ page.rating_url }}" target="_blank" rel="noopener noreferrer">{% else %}<span class="show-rating">{% endif %}
+            ★ {{ page.rating }}{% if page.rating_count %} <span class="show-meta-dim">({{ page.rating_count }} ratings)</span>{% endif %}
+            {% if page.rating_url %}</a>{% else %}</span>{% endif %}
+          {% endif %}
+          {% if page.episode_count %}<span class="show-meta-sep">&bull;</span><span>{{ page.episode_count }} episodes</span>{% endif %}
+          {% if page.hosts %}<span class="show-meta-sep">&bull;</span><span>{{ page.hosts | join: " &amp; " }}</span>{% endif %}
+        </div>
+        {% endif %}
+        <a href="{{ page.app_store_url }}"
+           class="show-cta"
+           id="show-cta"
+           data-show-slug="{{ page.slug }}"
+           {% if page.deep_link_scheme %}data-deep-link="{{ page.deep_link_scheme }}"{% endif %}
+           target="_blank" rel="noopener noreferrer">
+          <svg class="show-cta-icon" viewBox="0 0 384 512" aria-hidden="true">
+            <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-83.8-19.5-28.1-48.6-43.6-86.8-46.8-37.2-3.1-74.8 21.8-89.1 21.8-15.2 0-47.6-20.5-73.6-20.5C75.5 140.3 0 183.2 0 274.6c0 26.3 4.8 53.5 14.4 81.6 12.8 37.2 59 128.4 107.2 126.9 24.8-.6 42.4-17.8 74.8-17.8 31.2 0 47.6 17.8 75.2 17.8 48.8-.8 90.4-82.4 102.4-119.6-65.2-30.7-96.3-90.2-96.1-155.8zm-89.6-142c27.6-33.5 24.4-64.4 23.6-75.2-23.6 1.4-51 15.7-66.8 33.9-17.2 19.5-27.2 43.6-25.2 71.3 25.6 2 49.2-12.4 68.4-30z"/>
+          </svg>
+          Get the App
+        </a>
+      </div>
+      </div>
+
+      {% if page.schedule %}
+      <div class="show-schedule">
+        <p class="show-schedule-heading">
+          Daily Lineup
+          <span class="show-schedule-tz">All times {{ page.schedule.timezone_label | default: page.schedule.timezone }}</span>
+        </p>
+        <ul class="show-schedule-list" data-timezone="{{ page.schedule.timezone }}">
+          {% for block in page.schedule.blocks %}
+            {% assign start_parts = block.start | split: ":" %}
+            {% assign start_min = start_parts[0] | times: 60 | plus: start_parts[1] %}
+            {% assign end_parts = block.end | split: ":" %}
+            {% assign end_min = end_parts[0] | times: 60 | plus: end_parts[1] %}
+            <li class="show-schedule-item" data-start="{{ start_min }}" data-end="{{ end_min }}">
+              <span class="show-schedule-time">{{ block.start | date: "%-I:%M %p" }}–{{ block.end | date: "%-I:%M %p" }}</span>
+              <span class="show-schedule-info">
+                <span class="show-schedule-title">{{ block.title }}</span>
+                <span class="show-schedule-content">{{ block.content }}</span>
+              </span>
+              <span class="show-schedule-live">On now</span>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+    </div>
+  </section>
+
+  <main class="show-info">
+    <div class="show-info-inner">
+      {{ content }}
+      <a href="{{ page.app_store_url }}"
+         class="show-cta show-cta-secondary"
+         data-show-slug="{{ page.slug }}"
+         {% if page.deep_link_scheme %}data-deep-link="{{ page.deep_link_scheme }}"{% endif %}
+         target="_blank" rel="noopener noreferrer">
+        <svg class="show-cta-icon" viewBox="0 0 384 512" aria-hidden="true">
+          <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-83.8-19.5-28.1-48.6-43.6-86.8-46.8-37.2-3.1-74.8 21.8-89.1 21.8-15.2 0-47.6-20.5-73.6-20.5C75.5 140.3 0 183.2 0 274.6c0 26.3 4.8 53.5 14.4 81.6 12.8 37.2 59 128.4 107.2 126.9 24.8-.6 42.4-17.8 74.8-17.8 31.2 0 47.6 17.8 75.2 17.8 48.8-.8 90.4-82.4 102.4-119.6-65.2-30.7-96.3-90.2-96.1-155.8zm-89.6-142c27.6-33.5 24.4-64.4 23.6-75.2-23.6 1.4-51 15.7-66.8 33.9-17.2 19.5-27.2 43.6-25.2 71.3 25.6 2 49.2-12.4 68.4-30z"/>
+        </svg>
+        Get the App
+      </a>
+    </div>
+  </main>
+
+  <script src="{{ '/assets/js/show.js' | relative_url }}"></script>
+</body>
+</html>

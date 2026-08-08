@@ -142,19 +142,6 @@
     <div class="show-info-inner">
       {{ content }}
 
-      {% assign past_shows = page.live_shows | where_exp: "item", "item.status == 'past'" | sort: "date" | reverse %}
-      {% if past_shows.size > 0 %}
-      <h2>Past Live Shows</h2>
-      <ul class="show-live-list">
-        {% for event in past_shows %}
-        <li class="show-live-item">
-          <span class="show-live-date">{{ event.date | date: "%b %-d, %Y" }}</span>
-          <span class="show-live-title">{{ event.title }}</span>
-        </li>
-        {% endfor %}
-      </ul>
-      {% endif %}
-
       <a href="{{ page.app_store_url }}"
          class="show-cta show-cta-secondary"
          data-show-slug="{{ page.slug }}"

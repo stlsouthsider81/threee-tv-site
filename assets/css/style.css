@@ -228,6 +228,12 @@ html.show body {
   max-width: 1120px;
   margin: 0 auto;
   display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.show-hero-top {
+  display: flex;
   align-items: center;
   gap: 3.5rem;
 }
@@ -380,6 +386,101 @@ a.show-rating:hover {
   fill: currentColor;
 }
 
+.show-schedule {
+  width: 100%;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.show-schedule-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.show-schedule-tz {
+  font-size: 0.8rem;
+  font-weight: 500;
+  opacity: 0.55;
+  white-space: nowrap;
+}
+
+.show-schedule-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.show-schedule-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.show-schedule-item.is-live {
+  background: rgba(254, 33, 100, 0.14);
+  box-shadow: 0 0 0 1px rgba(254, 33, 100, 0.4) inset;
+}
+
+.show-schedule-time {
+  flex: 0 0 auto;
+  width: 9.5rem;
+  font-variant-numeric: tabular-nums;
+  font-size: 0.85rem;
+  opacity: 0.7;
+}
+
+.show-schedule-info {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.show-schedule-title {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.show-schedule-content {
+  font-size: 0.85rem;
+  opacity: 0.65;
+}
+
+.show-schedule-live {
+  flex: 0 0 auto;
+  display: none;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: #fe2164;
+}
+
+.show-schedule-item.is-live .show-schedule-live {
+  display: inline-flex;
+}
+
+.show-schedule-live::before {
+  content: "";
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: #fe2164;
+  animation: pulse 1.4s ease-in-out infinite;
+}
+
 .show-info {
   position: relative;
   background: #000;
@@ -419,6 +520,10 @@ a.show-rating:hover {
   }
 
   .show-hero-content {
+    gap: 2rem;
+  }
+
+  .show-hero-top {
     flex-direction: column;
     text-align: center;
     gap: 1.75rem;
@@ -455,5 +560,18 @@ a.show-rating:hover {
   .show-cta {
     width: 100%;
     justify-content: center;
+  }
+
+  .show-schedule {
+    max-width: 100%;
+    text-align: left;
+  }
+
+  .show-schedule-item {
+    flex-wrap: wrap;
+  }
+
+  .show-schedule-time {
+    width: auto;
   }
 }

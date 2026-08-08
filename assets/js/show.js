@@ -49,6 +49,40 @@
     });
   }
 
+  // Highlights whichever schedule block is airing right now, computed in
+  // the schedule's own timezone (not the visitor's), since the times are
+  // authored against a fixed zone (e.g. America/Chicago) regardless of
+  // where the page is viewed from.
+  function initSchedule() {
+    var list = document.querySelector('.show-schedule-list');
+    if (!list) return;
+
+    var timezone = list.getAttribute('data-timezone');
+    var items = list.querySelectorAll('.show-schedule-item');
+
+    var parts = new Intl.DateTimeFormat('en-US', {
+      timeZone: timezone,
+      hour: 'numeric',
+      minute: 'numeric',
+      hourCycle: 'h23'
+    }).formatToParts(new Date());
+
+    var hour = 0;
+    var minute = 0;
+    parts.forEach(function (part) {
+      if (part.type === 'hour') hour = parseInt(part.value, 10);
+      if (part.type === 'minute') minute = parseInt(part.value, 10);
+    });
+    var nowMinutes = hour * 60 + minute;
+
+    items.forEach(function (item) {
+      var start = parseInt(item.getAttribute('data-start'), 10);
+      var end = parseInt(item.getAttribute('data-end'), 10);
+      var isLive = nowMinutes >= start && nowMinutes < end;
+      item.classList.toggle('is-live', isLive);
+    });
+  }
+
   document.addEventListener('DOMContentLoaded', function () {
     var ctas = document.querySelectorAll('.show-cta');
     ctas.forEach(function (cta) {
@@ -64,5 +98,6 @@
     });
 
     initDescToggle();
+    initSchedule();
   });
 })();

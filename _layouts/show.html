@@ -44,6 +44,7 @@
     <div class="show-hero-bg" style="background-image: url('{{ page.hero_image | relative_url }}');"></div>
     <div class="show-hero-scrim"></div>
     <div class="show-hero-content">
+      <div class="show-hero-top">
       <img class="show-cover" src="{{ page.hero_image | relative_url }}" alt="{{ page.title }} cover art" width="360" height="360">
       <div class="show-hero-text">
         <p class="show-kicker">Now streaming on Threee TV</p>
@@ -89,6 +90,32 @@
           Get the App
         </a>
       </div>
+      </div>
+
+      {% if page.schedule %}
+      <div class="show-schedule">
+        <p class="show-schedule-heading">
+          Daily Lineup
+          <span class="show-schedule-tz">All times {{ page.schedule.timezone_label | default: page.schedule.timezone }}</span>
+        </p>
+        <ul class="show-schedule-list" data-timezone="{{ page.schedule.timezone }}">
+          {% for block in page.schedule.blocks %}
+            {% assign start_parts = block.start | split: ":" %}
+            {% assign start_min = start_parts[0] | times: 60 | plus: start_parts[1] %}
+            {% assign end_parts = block.end | split: ":" %}
+            {% assign end_min = end_parts[0] | times: 60 | plus: end_parts[1] %}
+            <li class="show-schedule-item" data-start="{{ start_min }}" data-end="{{ end_min }}">
+              <span class="show-schedule-time">{{ block.start | date: "%-I:%M %p" }}–{{ block.end | date: "%-I:%M %p" }}</span>
+              <span class="show-schedule-info">
+                <span class="show-schedule-title">{{ block.title }}</span>
+                <span class="show-schedule-content">{{ block.content }}</span>
+              </span>
+              <span class="show-schedule-live">On now</span>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
     </div>
   </section>
 

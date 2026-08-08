@@ -1,6 +1,6 @@
 ---
 layout: default
-title: threee.tv
+title: TV3
 ---
 
 <div class="video-container">

@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Privacy Policy — Threee TV
+title: Privacy Policy — TV3
 permalink: /privacy/
 ---
 
@@ -10,11 +10,11 @@ permalink: /privacy/
 
 ## 1. Overview
 
-This Privacy Policy describes how Threee TV ("Threee TV," "we," "us," or "our") collects, uses, and shares information in connection with the Threee TV website at threee.tv and the Threee TV mobile application (collectively, the "Service"). By accessing or using the Service, you agree to this Privacy Policy. If you do not agree, please do not use the Service.
+This Privacy Policy describes how TV3 ("TV3," "we," "us," or "our") collects, uses, and shares information in connection with the TV3 website at threee.tv and the TV3 mobile application (collectively, the "Service"). By accessing or using the Service, you agree to this Privacy Policy. If you do not agree, please do not use the Service.
 
 ## 2. About the Service
 
-Threee TV provides streaming video content delivered over the internet. The Service is offered on an "as is" and "as available" basis for personal, non-commercial viewing.
+TV3 provides streaming video content delivered over the internet. The Service is offered on an "as is" and "as available" basis for personal, non-commercial viewing.
 
 ## 3. Information We Collect
 
@@ -68,7 +68,7 @@ Video streams and other content are provided "as is" and "as available." We make
 
 ## 8. Limitation of Liability
 
-To the fullest extent permitted by applicable law, in no event shall Threee TV, its owners, operators, affiliates, or suppliers be liable for any indirect, incidental, special, consequential, exemplary, or punitive damages, or any loss of profits, revenue, data, goodwill, or other intangible losses, arising out of or relating to: (a) your access to, use of, or inability to access or use the Service; (b) any content obtained from or through the Service; (c) stream interruptions, downtime, errors, or inaccuracies; (d) unauthorized access to or alteration of your transmissions or data; or (e) the acts or omissions of any third party, including analytics or hosting providers. Our aggregate liability for any claim arising out of or relating to the Service is limited to one hundred U.S. dollars (US$100). Some jurisdictions do not allow the exclusion or limitation of certain damages, so some of the above limitations may not apply to you; in such jurisdictions, our liability is limited to the maximum extent permitted by law.
+To the fullest extent permitted by applicable law, in no event shall TV3, its owners, operators, affiliates, or suppliers be liable for any indirect, incidental, special, consequential, exemplary, or punitive damages, or any loss of profits, revenue, data, goodwill, or other intangible losses, arising out of or relating to: (a) your access to, use of, or inability to access or use the Service; (b) any content obtained from or through the Service; (c) stream interruptions, downtime, errors, or inaccuracies; (d) unauthorized access to or alteration of your transmissions or data; or (e) the acts or omissions of any third party, including analytics or hosting providers. Our aggregate liability for any claim arising out of or relating to the Service is limited to one hundred U.S. dollars (US$100). Some jurisdictions do not allow the exclusion or limitation of certain damages, so some of the above limitations may not apply to you; in such jurisdictions, our liability is limited to the maximum extent permitted by law.
 
 ## 9. Children's Privacy
 
@@ -81,7 +81,7 @@ Depending on where you live, you may have rights to access, correct, or delete p
 - Block or clear cookies in your browser
 - Use "Do Not Track" or Global Privacy Control signals supported by your browser
 - Reset or limit the advertising identifier on your mobile device
-- Uninstall the Threee TV app to stop further data collection from it
+- Uninstall the TV3 app to stop further data collection from it
 - Contact us to request deletion of information associated with you, to the extent we can identify it
 
 ## 11. Data Retention and Security

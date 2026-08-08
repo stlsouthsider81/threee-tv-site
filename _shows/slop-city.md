@@ -66,4 +66,4 @@ no sponsors, no notes, entirely listener-supported.
 > "We aren't trying to be anyone but ourselves."
 
 New episodes drop every Tuesday. Catch up on the full archive and stream
-Slop City right inside the Threee TV app.
+Slop City right inside the TV3 app.

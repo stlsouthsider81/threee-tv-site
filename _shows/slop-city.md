@@ -6,6 +6,7 @@ hero_image: "/assets/images/shows/slop-city/cover.jpg"
 hosts: ["Libbie Higgins", "Tina Dybal"]
 rating: "4.9"
 rating_count: "879"
+rating_url: "https://podcasts.apple.com/us/podcast/slop-city/id1443198245"
 episode_count: "320+"
 app_store_url: "https://apps.apple.com/us/app/threee-tv/id6762097424"
 ---

@@ -284,6 +284,11 @@ html.show body {
 .show-rating {
   color: #ffd166;
   font-weight: 600;
+  text-decoration: none;
+}
+
+a.show-rating:hover {
+  text-decoration: underline;
 }
 
 .show-meta-dim {

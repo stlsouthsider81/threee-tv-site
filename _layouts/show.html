@@ -51,7 +51,11 @@
         {% if page.tagline %}<p class="show-tagline">{{ page.tagline }}</p>{% endif %}
         {% if page.rating or page.episode_count or page.hosts %}
         <div class="show-meta">
-          {% if page.rating %}<span class="show-rating">★ {{ page.rating }}{% if page.rating_count %} <span class="show-meta-dim">({{ page.rating_count }} ratings)</span>{% endif %}</span>{% endif %}
+          {% if page.rating %}
+            {% if page.rating_url %}<a class="show-rating" href="{{ page.rating_url }}" target="_blank" rel="noopener noreferrer">{% else %}<span class="show-rating">{% endif %}
+            ★ {{ page.rating }}{% if page.rating_count %} <span class="show-meta-dim">({{ page.rating_count }} ratings)</span>{% endif %}
+            {% if page.rating_url %}</a>{% else %}</span>{% endif %}
+          {% endif %}
           {% if page.episode_count %}<span class="show-meta-sep">&bull;</span><span>{{ page.episode_count }} episodes</span>{% endif %}
           {% if page.hosts %}<span class="show-meta-sep">&bull;</span><span>{{ page.hosts | join: " &amp; " }}</span>{% endif %}
         </div>

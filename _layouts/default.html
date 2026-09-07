@@ -2,12 +2,18 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>{{ page.title | default: site.title }}</title>
   <link rel="icon" href="{{ '/favicon.ico' | relative_url }}" sizes="any">
   <link rel="icon" type="image/png" sizes="32x32" href="{{ '/assets/images/favicon-32x32.png' | relative_url }}">
   <link rel="icon" type="image/png" sizes="16x16" href="{{ '/assets/images/favicon-16x16.png' | relative_url }}">
   <link rel="apple-touch-icon" sizes="180x180" href="{{ '/assets/images/apple-touch-icon.png' | relative_url }}">
+  <link rel="manifest" href="{{ '/manifest.webmanifest' | relative_url }}">
+  <meta name="theme-color" content="#000000">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="TV3">
   <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
   <!-- Google Tag Manager -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -32,6 +38,7 @@
     <div id="loader" class="loader">
       <img src="{{ '/assets/images/logo.png' | relative_url }}" alt="">
     </div>
+    <div id="net-status" class="net-status hidden" role="status">Slow connection&hellip;</div>
   </div>
   <button id="mute-btn" class="mute-btn" type="button" aria-label="Unmute" aria-pressed="true">
     <svg class="icon-muted" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -43,6 +50,14 @@
       <path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a9 9 0 0 1 0 14" fill="none" stroke-linecap="round"/>
     </svg>
   </button>
+  <button id="fs-btn" class="fs-btn" type="button" aria-label="Full screen">
+    <svg class="icon-expand" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path d="M8 3H3v5M16 3h5v5M8 21H3v-5M16 21h5v-5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <svg class="icon-compress" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path d="M3 8h5V3M21 8h-5V3M3 16h5v5M21 16h-5v5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
   <a href="https://apps.apple.com/us/app/threee-tv/id6762097424" class="app-store-badge" aria-label="Download on the App Store" target="_blank" rel="noopener noreferrer">
     <img src="{{ '/assets/images/app-store-badge.svg' | relative_url }}" alt="Download on the App Store" width="150" height="50">
   </a>
@@ -51,22 +66,83 @@
     var video = document.getElementById('video');
     if (video) {
       var loader = document.getElementById('loader');
-      var showLoader = function () { if (loader) loader.classList.remove('hidden'); };
+      var netStatus = document.getElementById('net-status');
       var hideLoader = function () { if (loader) loader.classList.add('hidden'); };
+      // Before the first frame, a stall shows the centered logo; once the
+      // viewer is watching, cover nothing — after a sustained stall, show a
+      // small corner note instead. Momentary hiccups show nothing at all.
+      var hasPlayed = false;
+      var stallTimer;
+      var showLoader = function () {
+        if (!hasPlayed) {
+          if (loader) loader.classList.remove('hidden');
+          return;
+        }
+        clearTimeout(stallTimer);
+        stallTimer = setTimeout(function () {
+          netStatus.classList.remove('hidden');
+        }, 1500);
+      };
+      var clearStall = function () {
+        hasPlayed = true;
+        clearTimeout(stallTimer);
+        hideLoader();
+        netStatus.classList.add('hidden');
+      };
       var src = 'https://cdn.threee.tv/hls/stream.m3u8';
       if (Hls.isSupported()) {
-        var hls = new Hls();
-        hls.loadSource(src);
-        hls.attachMedia(video);
+        var hls;
+        var startHls = function () {
+          hls = new Hls();
+          hls.loadSource(src);
+          hls.attachMedia(video);
+          // Recover from stream interruptions (e.g. a hard cut between
+          // shows replaces the playlist) instead of requiring a refresh.
+          hls.on(Hls.Events.ERROR, function (event, data) {
+            if (!data.fatal) return;
+            showLoader();
+            if (data.type === Hls.ErrorTypes.NETWORK_ERROR) {
+              setTimeout(function () { hls.startLoad(); }, 2000);
+            } else if (data.type === Hls.ErrorTypes.MEDIA_ERROR) {
+              hls.recoverMediaError();
+            } else {
+              hls.destroy();
+              setTimeout(startHls, 2000);
+            }
+          });
+        };
+        startHls();
       } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
         video.src = src;
+        // Native HLS (iOS Safari) stops on stream interruptions; reload
+        // the live playlist after a short delay instead of requiring a refresh.
+        var reloadTimer;
+        var reloadNative = function () {
+          showLoader();
+          clearTimeout(reloadTimer);
+          reloadTimer = setTimeout(function () {
+            video.src = src;
+            video.load();
+            video.play();
+          }, 2000);
+        };
+        video.addEventListener('error', reloadNative);
+        video.addEventListener('ended', reloadNative);
       }
-      video.addEventListener('playing', hideLoader);
-      video.addEventListener('canplay', hideLoader);
+      video.addEventListener('playing', clearStall);
+      video.addEventListener('canplay', clearStall);
+      // 'stalled' can fire while playback continues from buffer, with no
+      // 'playing' event to follow; advancing time is what clears the note.
+      video.addEventListener('timeupdate', function () {
+        if (!video.paused) clearStall();
+      });
       video.addEventListener('waiting', showLoader);
       video.addEventListener('stalled', showLoader);
       video.addEventListener('error', showLoader);
       video.addEventListener('pause', function() {
+        // Let iOS's native fullscreen player pause normally; on the page
+        // itself there is no pause control, so any pause is spurious.
+        if (video.webkitDisplayingFullscreen) return;
         video.play();
       });
 
@@ -84,6 +160,39 @@
       video.addEventListener('volumechange', syncMuteBtn);
       syncMuteBtn();
 
+      var fsBtn = document.getElementById('fs-btn');
+      var syncFsBtn = function () {
+        var fs = !!document.fullscreenElement;
+        fsBtn.classList.toggle('is-fullscreen', fs);
+        fsBtn.setAttribute('aria-label', fs ? 'Exit full screen' : 'Full screen');
+      };
+      fsBtn.addEventListener('click', function () {
+        var root = document.documentElement;
+        if (document.fullscreenElement) {
+          document.exitFullscreen();
+        } else if (document.fullscreenEnabled && root.requestFullscreen) {
+          // Fullscreen the page (not the video) so the custom controls stay usable.
+          root.requestFullscreen().then(function () {
+            if (screen.orientation && screen.orientation.lock) {
+              screen.orientation.lock('landscape').catch(function () {});
+            }
+          }).catch(function () {});
+        } else if (video.webkitEnterFullscreen) {
+          // iPhone Safari: the page can't go fullscreen, but the video can —
+          // iOS's native player, the same app-like fullscreen users expect.
+          // Rotating the phone there fills the screen in landscape.
+          video.webkitEnterFullscreen();
+        }
+        showControls();
+      });
+      document.addEventListener('fullscreenchange', function () {
+        if (!document.fullscreenElement && screen.orientation && screen.orientation.unlock) {
+          screen.orientation.unlock();
+        }
+        syncFsBtn();
+      });
+      syncFsBtn();
+
       // Fade the controls away after a period of inactivity.
       var hideTimer;
       var showControls = function () {
@@ -97,6 +206,10 @@
         document.addEventListener(evt, showControls, { passive: true });
       });
       showControls();
+    }
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('{{ '/sw.js' | relative_url }}');
     }
   </script>
 </body>

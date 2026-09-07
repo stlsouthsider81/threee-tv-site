@@ -48,6 +48,14 @@ schedule:
       end: "24:00"
       title: "Slop After Dark"
       content: "Slop City specials, shuffled"
+live_shows:
+  - title: "Slop City Live Watch Party"
+    datetime: "2026-08-13T19:30:00-05:00"
+    timezone_label: "CT"
+    status: "upcoming"
+  - title: "730 LIVESTREAM WATCH PARTY Fruit Cocktail (Donald's Version)"
+    date: "2026-07-14"
+    status: "past"
 ---
 
 ## About the show

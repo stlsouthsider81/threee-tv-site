@@ -2,13 +2,19 @@
 <html lang="en" class="show">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>{{ page.title }} — {{ site.title }}</title>
   <meta name="description" content="{{ page.tagline | default: site.description }}">
   <link rel="icon" href="{{ '/favicon.ico' | relative_url }}" sizes="any">
   <link rel="icon" type="image/png" sizes="32x32" href="{{ '/assets/images/favicon-32x32.png' | relative_url }}">
   <link rel="icon" type="image/png" sizes="16x16" href="{{ '/assets/images/favicon-16x16.png' | relative_url }}">
   <link rel="apple-touch-icon" sizes="180x180" href="{{ '/assets/images/apple-touch-icon.png' | relative_url }}">
+  <link rel="manifest" href="{{ '/manifest.webmanifest' | relative_url }}">
+  <meta name="theme-color" content="#000000">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="TV3">
   <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
 
   <meta property="og:type" content="website">
@@ -92,6 +98,25 @@
       </div>
       </div>
 
+      {% assign spotlight_shows = page.live_shows | where_exp: "item", "item.status == 'upcoming' or item.status == 'live'" | sort: "datetime" %}
+      {% if spotlight_shows.size > 0 %}
+      <div class="show-live-spotlight">
+        {% for event in spotlight_shows %}
+        <div class="show-live-card{% if event.status == 'live' %} is-live{% endif %}"
+             data-status="{{ event.status }}"
+             {% if event.datetime %}data-datetime="{{ event.datetime | date_to_xmlschema }}"{% endif %}>
+          <span class="show-live-card-badge">{% if event.status == 'live' %}Live Now{% else %}Upcoming{% endif %}</span>
+          <p class="show-live-card-title">{{ event.title }}</p>
+          {% if event.datetime %}
+          <p class="show-live-card-time">{{ event.datetime | date: "%A, %b %-d" }} at {{ event.datetime | date: "%-I:%M %p" }} {{ event.timezone_label | default: page.schedule.timezone_label }}</p>
+          {% elsif event.date %}
+          <p class="show-live-card-time">{{ event.date | date: "%A, %b %-d" }}</p>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
       {% if page.schedule %}
       <div class="show-schedule">
         <p class="show-schedule-heading">
@@ -122,6 +147,7 @@
   <main class="show-info">
     <div class="show-info-inner">
       {{ content }}
+
       <a href="{{ page.app_store_url }}"
          class="show-cta show-cta-secondary"
          data-show-slug="{{ page.slug }}"
@@ -136,5 +162,10 @@
   </main>
 
   <script src="{{ '/assets/js/show.js' | relative_url }}"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('{{ '/sw.js' | relative_url }}');
+    }
+  </script>
 </body>
 </html>

@@ -83,6 +83,50 @@
     });
   }
 
+  // Content editors set status ("upcoming"/"live") manually and add shows
+  // ad hoc, so there's no rebuild guaranteed to happen right as a show
+  // starts or ends. This upgrades an "upcoming" card to "Live Now" once
+  // its start time passes, and hides it a few hours later so a show from
+  // days ago doesn't linger looking current — all computed against the
+  // visitor's real clock at page load, not the last build time.
+  function initLiveSpotlight() {
+    var wrapper = document.querySelector('.show-live-spotlight');
+    if (!wrapper) return;
+
+    var GRACE_HOURS = 4;
+    var now = new Date();
+    var anyVisible = false;
+
+    wrapper.querySelectorAll('.show-live-card').forEach(function (card) {
+      if (card.getAttribute('data-status') === 'live') {
+        anyVisible = true;
+        return;
+      }
+
+      var iso = card.getAttribute('data-datetime');
+      if (!iso) {
+        anyVisible = true;
+        return;
+      }
+
+      var hoursSinceStart = (now - new Date(iso)) / 3600000;
+
+      if (hoursSinceStart >= GRACE_HOURS) {
+        card.classList.add('is-past');
+        return;
+      }
+
+      anyVisible = true;
+      if (hoursSinceStart >= 0) {
+        card.classList.add('is-live');
+        var badge = card.querySelector('.show-live-card-badge');
+        if (badge) badge.textContent = 'Live Now';
+      }
+    });
+
+    if (!anyVisible) wrapper.classList.add('is-empty');
+  }
+
   document.addEventListener('DOMContentLoaded', function () {
     var ctas = document.querySelectorAll('.show-cta');
     ctas.forEach(function (cta) {
@@ -99,5 +143,6 @@
 
     initDescToggle();
     initSchedule();
+    initLiveSpotlight();
   });
 })();

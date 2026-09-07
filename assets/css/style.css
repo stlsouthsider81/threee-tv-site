@@ -174,6 +174,83 @@ header {
   display: none;
 }
 
+/* "Now playing" lower-third over the homepage video, fed by the schedule
+   API. Fades with the rest of the controls. */
+.now-playing {
+  position: absolute;
+  left: 1.5rem;
+  bottom: calc(6rem + env(safe-area-inset-bottom));
+  z-index: 5;
+  max-width: min(26rem, calc(100% - 3rem));
+  padding: 0.85rem 1.1rem;
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.55);
+  pointer-events: none;
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  transition: opacity 0.4s ease;
+}
+
+.now-playing.hidden {
+  display: none;
+}
+
+.controls-hidden .now-playing {
+  opacity: 0;
+}
+
+.now-playing-kicker {
+  color: #fe2164;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 0.3rem;
+}
+
+.now-playing-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.now-playing-sub {
+  font-size: 0.85rem;
+  opacity: 0.75;
+  margin-top: 0.2rem;
+}
+
+.now-playing-sub.hidden {
+  display: none;
+}
+
+.now-playing-progress {
+  margin-top: 0.65rem;
+  height: 3px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.25);
+  overflow: hidden;
+}
+
+.now-playing-progress.hidden {
+  display: none;
+}
+
+.now-playing-progress-fill {
+  height: 100%;
+  width: 0;
+  background: #fe2164;
+  transition: width 1s linear;
+}
+
+@media (max-width: 768px) {
+  .now-playing {
+    left: 1rem;
+    bottom: calc(5rem + env(safe-area-inset-bottom));
+    max-width: calc(100% - 2rem);
+  }
+}
+
 @media (max-width: 768px) {
   .mute-btn {
     bottom: calc(1rem + env(safe-area-inset-bottom));

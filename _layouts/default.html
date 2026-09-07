@@ -39,6 +39,14 @@
       <img src="{{ '/assets/images/logo.png' | relative_url }}" alt="">
     </div>
     <div id="net-status" class="net-status hidden" role="status">Slow connection&hellip;</div>
+    <div id="now-playing" class="now-playing hidden">
+      <p class="now-playing-kicker" id="now-playing-kicker">Now Playing</p>
+      <p class="now-playing-title" id="now-playing-title"></p>
+      <p class="now-playing-sub hidden" id="now-playing-sub"></p>
+      <div class="now-playing-progress" id="now-playing-progress">
+        <div class="now-playing-progress-fill" id="now-playing-progress-fill"></div>
+      </div>
+    </div>
   </div>
   <button id="mute-btn" class="mute-btn" type="button" aria-label="Unmute" aria-pressed="true">
     <svg class="icon-muted" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -89,6 +97,28 @@
         hideLoader();
         netStatus.classList.add('hidden');
       };
+      // iOS rejects programmatic play() with sound outside a user gesture
+      // (e.g. resuming after Picture-in-Picture closes). Rather than staying
+      // wedged, resume muted — the mute button lights up via 'volumechange'
+      // so one tap restores sound.
+      var inPiP = function () {
+        return video.webkitPresentationMode === 'picture-in-picture';
+      };
+      var safePlay = function () {
+        // Never (re)start playback while the page is hidden — recovery
+        // restarting a backgrounded live stream is how audio haunts a
+        // "closed" browser. PiP is the one sanctioned background mode.
+        if (document.hidden && !inPiP()) return;
+        var p = video.play();
+        if (p && p.catch) {
+          p.catch(function () {
+            if (!video.muted) {
+              video.muted = true;
+              video.play().catch(function () {});
+            }
+          });
+        }
+      };
       var src = 'https://cdn.threee.tv/hls/stream.m3u8';
       if (Hls.isSupported()) {
         var hls;
@@ -118,12 +148,15 @@
         // the live playlist after a short delay instead of requiring a refresh.
         var reloadTimer;
         var reloadNative = function () {
+          // Don't churn the stream in a hidden tab; the visibility handler
+          // rejoins the live edge when the viewer comes back.
+          if (document.hidden && !inPiP()) return;
           showLoader();
           clearTimeout(reloadTimer);
           reloadTimer = setTimeout(function () {
             video.src = src;
             video.load();
-            video.play();
+            safePlay();
           }, 2000);
         };
         video.addEventListener('error', reloadNative);
@@ -140,11 +173,63 @@
       video.addEventListener('stalled', showLoader);
       video.addEventListener('error', showLoader);
       video.addEventListener('pause', function() {
-        // Let iOS's native fullscreen player pause normally; on the page
-        // itself there is no pause control, so any pause is spurious.
+        // Let the native fullscreen player, PiP, and background tabs pause
+        // normally; on the page itself there is no pause control, so any
+        // other pause is spurious.
         if (video.webkitDisplayingFullscreen) return;
-        video.play();
+        if (video.webkitPresentationMode === 'picture-in-picture') return;
+        if (document.hidden) return;
+        safePlay();
       });
+
+      // Rejoin the live edge after PiP closes or the tab was backgrounded —
+      // the stream has moved on and the wedged element won't recover alone.
+      var resumeLive = function () {
+        clearTimeout(stallTimer);
+        netStatus.classList.add('hidden');
+        if (typeof hls !== 'undefined' && hls) {
+          hls.startLoad();
+          if (hls.liveSyncPosition && video.currentTime < hls.liveSyncPosition - 30) {
+            video.currentTime = hls.liveSyncPosition;
+          }
+        } else {
+          video.src = src;
+          video.load();
+        }
+        safePlay();
+      };
+      video.addEventListener('webkitpresentationmodechanged', function () {
+        if (video.webkitPresentationMode === 'inline') resumeLive();
+      });
+      // Don't keep a live stream playing in a hidden tab or backgrounded
+      // browser — PiP is the one deliberate background-viewing mode. iOS
+      // fires pagehide/freeze on app switches where visibilitychange can
+      // arrive too late or not at all, so listen to all three.
+      var pauseInBackground = function () {
+        if (!inPiP()) video.pause();
+      };
+      document.addEventListener('visibilitychange', function () {
+        if (document.visibilityState === 'visible') {
+          if (video.paused || video.readyState < 3) resumeLive();
+        } else {
+          pauseInBackground();
+        }
+      });
+      window.addEventListener('pagehide', pauseInBackground);
+      document.addEventListener('freeze', pauseInBackground);
+
+      // The instant of the frame currently on screen (from the stream's
+      // EXT-X-PROGRAM-DATE-TIME), for the schedule overlay. Null until known.
+      window.tv3PlayingDate = function () {
+        if (typeof hls !== 'undefined' && hls && hls.playingDate) return hls.playingDate;
+        if (video.getStartDate) {
+          var sd = video.getStartDate();
+          if (sd && !isNaN(sd.getTime())) {
+            return new Date(sd.getTime() + video.currentTime * 1000);
+          }
+        }
+        return null;
+      };
 
       var muteBtn = document.getElementById('mute-btn');
       var syncMuteBtn = function () {
@@ -206,11 +291,15 @@
         document.addEventListener(evt, showControls, { passive: true });
       });
       showControls();
+      // Let the schedule overlay restart the reveal window when its content
+      // first arrives, so the show name is always seen on initial load.
+      window.tv3ShowControls = showControls;
     }
 
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('{{ '/sw.js' | relative_url }}');
     }
   </script>
+  <script src="{{ '/assets/js/schedule.js' | relative_url }}"></script>
 </body>
 </html>

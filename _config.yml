@@ -18,3 +18,18 @@ defaults:
       type: "shows"
     values:
       layout: "show"
+
+# ---- Per-environment settings (prod values) ---------------------------------
+# The dev stack overrides these from its .env
+# (SITE_STREAM_URL, SITE_SCHEDULE_API, SITE_CONFIG_<NAME>), so main is all it
+# needs. To point a local `jekyll serve` at dev instead:
+#   bundle exec jekyll serve --config _config.yml,_config.dev.yml
+
+# HLS stream URL.
+stream_url: "https://cdn.threee.tv/hls/stream.m3u8"
+
+# Schedule API (now-playing overlay + daily lineup).
+schedule_api: "https://api-stream.threee.tv"
+
+# Web app login (the "Chat" button).
+app_url: "https://app.threee.tv/login"

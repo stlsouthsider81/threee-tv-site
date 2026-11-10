@@ -1,0 +1,5 @@
+# Point the site's web-app links (the "Chat" button) at a locally running
+# threeetv-web-app (Sail/artisan serve on :8000). Stack it last:
+#   bundle exec jekyll serve --config _config.yml,_config.local.yml
+#   bundle exec jekyll serve --config _config.yml,_config.dev.yml,_config.local.yml
+app_url: "http://localhost:8000/login"

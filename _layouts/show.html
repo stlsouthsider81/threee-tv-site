@@ -84,7 +84,7 @@
           {% if page.hosts %}<span class="show-meta-sep">&bull;</span><span>{{ page.hosts | join: " &amp; " }}</span>{% endif %}
         </div>
         {% endif %}
-        <a href="{{ page.app_store_url }}"
+        <a href="{{ site.app_store_url }}"
            class="show-cta"
            id="show-cta"
            data-show-slug="{{ page.slug }}"
@@ -148,7 +148,7 @@
     <div class="show-info-inner">
       {{ content }}
 
-      <a href="{{ page.app_store_url }}"
+      <a href="{{ site.app_store_url }}"
          class="show-cta show-cta-secondary"
          data-show-slug="{{ page.slug }}"
          {% if page.deep_link_scheme %}data-deep-link="{{ page.deep_link_scheme }}"{% endif %}

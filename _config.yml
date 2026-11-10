@@ -20,9 +20,8 @@ defaults:
       layout: "show"
 
 # ---- Per-environment settings (prod values) ---------------------------------
-# The dev stack overrides these from its .env
-# (SITE_STREAM_URL, SITE_SCHEDULE_API, SITE_CONFIG_<NAME>), so main is all it
-# needs. To point a local `jekyll serve` at dev instead:
+# Dev values live in _config.dev.yml, layered over this file. The dev stack
+# (threetv-prod, SITE=1) builds with both; so can a local `jekyll serve`:
 #   bundle exec jekyll serve --config _config.yml,_config.dev.yml
 
 # HLS stream URL.
@@ -33,3 +32,6 @@ schedule_api: "https://api-stream.threee.tv"
 
 # Web app login (the "Chat" button).
 app_url: "https://app.threee.tv/login"
+
+# iOS app on the App Store (header badge + show page "Get the App" buttons).
+app_store_url: "https://apps.apple.com/us/app/threee-tv/id6762097424"

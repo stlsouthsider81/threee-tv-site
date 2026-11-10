@@ -162,6 +162,7 @@
   </main>
 
   <script src="{{ '/assets/js/show.js' | relative_url }}"></script>
+  <script>window.TV3_SCHEDULE_API = '{{ site.schedule_api }}';</script>
   <script src="{{ '/assets/js/schedule.js' | relative_url }}"></script>
   <script>
     if ('serviceWorker' in navigator) {

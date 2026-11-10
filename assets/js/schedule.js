@@ -3,7 +3,9 @@
 // The API sets proper Cache-Control (+ stale-while-revalidate); never add
 // cache-busters.
 (function () {
-  var API = 'https://api-stream.threee.tv';
+  // Set per build by the layouts from site.schedule_api (_config.yml); the
+  // literal is the prod fallback.
+  var API = window.TV3_SCHEDULE_API || 'https://api-stream.threee.tv';
   var CHANNEL = 'main';
 
   // ---------- Homepage: now-playing overlay ----------

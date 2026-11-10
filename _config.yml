@@ -18,3 +18,10 @@ defaults:
       type: "shows"
     values:
       layout: "show"
+
+# HLS stream URL. Override locally with:
+#   bundle exec jekyll serve --config _config.yml,_config.dev.yml
+stream_url: "https://cdn.threee.tv/hls/stream.m3u8"
+
+# Schedule API (now-playing overlay + daily lineup).
+schedule_api: "https://api-stream.threee.tv"

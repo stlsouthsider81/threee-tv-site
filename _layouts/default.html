@@ -125,7 +125,7 @@
           });
         }
       };
-      var src = 'https://cdn.threee.tv/hls/stream.m3u8';
+      var src = '{{ site.stream_url }}';
       if (Hls.isSupported()) {
         var hls;
         var startHls = function () {
@@ -306,6 +306,7 @@
       navigator.serviceWorker.register('{{ '/sw.js' | relative_url }}');
     }
   </script>
+  <script>window.TV3_SCHEDULE_API = '{{ site.schedule_api }}';</script>
   <script src="{{ '/assets/js/schedule.js' | relative_url }}"></script>
 </body>
 </html>

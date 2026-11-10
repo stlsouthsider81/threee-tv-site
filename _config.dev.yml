@@ -1,0 +1,4 @@
+# Local overrides. Usage:
+#   bundle exec jekyll serve --config _config.yml,_config.dev.yml
+stream_url: "https://stream.threeetv.dev/hls/stream.m3u8"
+schedule_api: "https://api-stream.threeetv.dev"
